@@ -1,5 +1,6 @@
 import os
 from gpt3 import *
+from tts import *
 from utils import *
 from dotenv import load_dotenv
 from twitchio.ext import commands
@@ -42,7 +43,6 @@ class Bot(commands.Bot):
 
         # Imprime por consola el mensaje recibido
         print(f'<= | {message.author.name}: {message.content}')
-
         # Guarda en el log el mensaje recibido
         save_in_log(f'<= | {message.author.name}: {message.content} \n')
 
@@ -55,18 +55,21 @@ class Bot(commands.Bot):
         # Recoge la respuesta de GPT-3
         response = gpt3_request(Bot.conversation)
 
+        # Reproduce el mensaje recibido
+        tts_play(message.content)
+
         # Imprime por consola la respuesta de GPT-3
         print(f'=> | ElSebasIA: {response}')
-
         # Guarda en el log la respuesta de GPT-3
         save_in_log(f'=> | ElSebasIA: {response} \n')
 
+        # Reproduce la respuesta de GPT-3
+        tts_play(response)
+
         # Imprime por consola una distinción
         print("--------------------------------------------------------")
-
         # Guarda en el log una distinción
         save_in_log("-------------------------------------------------------- \n")
-
 
 # Guarda en una variable del sistema la KEY de Google para el TTS
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.environ.get("GOOGLE_KEY")
